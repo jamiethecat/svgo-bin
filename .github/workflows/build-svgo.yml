@@ -1,4 +1,4 @@
-name: Build SVGO
+name: Build
 
 on:
   push:
@@ -15,11 +15,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "latest"
+          node-version: "18"
       - run: npm install -g pkg
       - run: npm install svgo
       - run: pkg node_modules/svgo/bin/svgo -t latest-linux-x64 -o svgo
-      - uses: actions/upload-artifact@v3
+      - name: Create Release
+        uses: ncipollo/release-action@v1
         with:
-          name: svgo
-          path: svgo
+          tag: "v${{ github.sha }}"
+          artifacts: svgo
+          token: ${{ secrets.PAT }}
+
