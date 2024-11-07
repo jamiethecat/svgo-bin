@@ -1,0 +1,25 @@
+name: Build SVGO
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "latest"
+      - run: npm install -g pkg
+      - run: npm install svgo
+      - run: pkg node_modules/svgo/bin/svgo -t latest-linux-x64 -o svgo
+      - uses: actions/upload-artifact@v3
+        with:
+          name: svgo
+          path: svgo
